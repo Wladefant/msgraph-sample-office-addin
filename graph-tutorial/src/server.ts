@@ -1,7 +1,3 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
-// <ServerSnippet>
 import express, { RequestHandler } from 'express';
 import https from 'https';
 import fs from 'fs';
@@ -31,6 +27,7 @@ const serverOptions = {
 };
 
 https.createServer(serverOptions, app).listen(PORT, () => {
+  console.log('https.createServer function started');
   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+  console.log('https.createServer function ended');
 });
-// </ServerSnippet>

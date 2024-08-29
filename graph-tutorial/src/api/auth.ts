@@ -23,6 +23,7 @@ const keyClient = jwksClient({
 
 // Parses the JWT header and retrieves the appropriate public key
 function getSigningKey(header: JwtHeader, callback: SigningKeyCallback): void {
+  console.log('getSigningKey function started');
   if (header) {
     keyClient.getSigningKey(header.kid || '', (err, key) => {
       if (err) {
@@ -32,10 +33,12 @@ function getSigningKey(header: JwtHeader, callback: SigningKeyCallback): void {
       }
     });
   }
+  console.log('getSigningKey function ended');
 }
 
 // Validates a JWT and returns it if valid
 async function validateJwt(authHeader: string): Promise<string | null> {
+  console.log('validateJwt function started');
   return new Promise((resolve) => {
     const token = authHeader.split(' ')[1];
 
@@ -54,11 +57,13 @@ async function validateJwt(authHeader: string): Promise<string | null> {
       }
     });
   });
+  console.log('validateJwt function ended');
 }
 
 // Gets a Graph token from the API token contained in the
 // auth header
 export async function getTokenOnBehalfOf(authHeader: string): Promise<string | undefined> {
+  console.log('getTokenOnBehalfOf function started');
   // Validate the supplied token if present
   const token = await validateJwt(authHeader);
 
@@ -71,6 +76,7 @@ export async function getTokenOnBehalfOf(authHeader: string): Promise<string | u
 
     return result?.accessToken;
   }
+  console.log('getTokenOnBehalfOf function ended');
 }
 // </TokenExchangeSnippet>
 
@@ -81,6 +87,7 @@ export async function getTokenOnBehalfOf(authHeader: string): Promise<string | u
 // interactive login so the user can consent.
 authRouter.get('/status',
   async function(req, res) {
+    console.log('authRouter.get("/status") function started');
     // Validate access token
     const authHeader = req.headers['authorization'];
     if (authHeader) {
@@ -114,6 +121,7 @@ authRouter.get('/status',
       // No auth header
       res.status(401).end();
     }
+    console.log('authRouter.get("/status") function ended');
   }
 );
 // </GetAuthStatusSnippet>

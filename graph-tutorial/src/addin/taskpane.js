@@ -25,6 +25,7 @@ function getBaseUrl() {
  * @param {{ message: string; origin: string | undefined; } | { error: number }} result
  */
 function processConsent(result) {
+  console.log('processConsent function started');
   // @ts-ignore
   const message = JSON.parse(result.message);
 
@@ -35,11 +36,13 @@ function processConsent(result) {
     const error = JSON.stringify(message.result, Object.getOwnPropertyNames(message.result));
     showStatus(`An error was returned from the consent dialog: ${error}`, true);
   }
+  console.log('processConsent function ended');
 }
 
 // Use the Office Dialog API to show the interactive
 // login UI
 function showConsentPopup() {
+  console.log('showConsentPopup function started');
   const authDialogUrl = `${getBaseUrl()}/consent.html`;
 
   Office.context.ui.displayDialogAsync(authDialogUrl,
@@ -58,10 +61,12 @@ function showConsentPopup() {
         showStatus(`Could not open consent prompt dialog: ${error}`, true);
       }
     });
+  console.log('showConsentPopup function ended');
 }
 
 // Inform the user we need to get their consent
 function showConsentUi() {
+  console.log('showConsentUi function started');
   $('.container').empty();
   $('<p/>', {
     class: 'ms-fontSize-24 ms-fontWeight-bold',
@@ -84,6 +89,7 @@ function showConsentUi() {
     text: 'Give permission'
   }).on('click', showConsentPopup)
     .appendTo('.container');
+  console.log('showConsentUi function ended');
 }
 
 // Display a status
@@ -92,6 +98,7 @@ function showConsentUi() {
  * @param {boolean} isError
  */
 function showStatus(message, isError) {
+  console.log('showStatus function started');
   $('.status').empty();
   $('<div/>', {
     class: `status-card ms-depth-4 ${isError ? 'error-msg' : 'success-msg'}`
@@ -102,18 +109,22 @@ function showStatus(message, isError) {
     class: 'ms-fontSize-16 ms-fontWeight-regular',
     text: message
   })).appendTo('.status');
+  console.log('showStatus function ended');
 }
 
 /**
  * @param {boolean} show
  */
 function toggleOverlay(show) {
+  console.log('toggleOverlay function started');
   $('.overlay').css('display', show ? 'block' : 'none');
+  console.log('toggleOverlay function ended');
 }
 // </AuthUiSnippet>
 
 // <MainUiSnippet>
 function showMainUi() {
+  console.log('showMainUi function started');
   $('.container').empty();
 
   // Use luxon to calculate the start
@@ -193,6 +204,7 @@ function showMainUi() {
       id: 'importButton',
       value: 'Create'
     })).appendTo('.container');
+  console.log('showMainUi function ended');
 }
 // </MainUiSnippet>
 
@@ -225,6 +237,7 @@ function convertDateToOAFormat(dateTime) {
  * @param {any[]} events
  */
 async function writeEventsToSheet(events) {
+  console.log('writeEventsToSheet function started');
   await Excel.run(async (context) => {
     const sheet = context.workbook.worksheets.getActiveWorksheet();
     const eventsTable = sheet.tables.add('A1:D1', true);
@@ -265,6 +278,7 @@ async function writeEventsToSheet(events) {
       showStatus(err, true);
     }
   });
+  console.log('writeEventsToSheet function ended');
 }
 // </WriteToSheetSnippet>
 
@@ -273,6 +287,7 @@ async function writeEventsToSheet(events) {
  * @param {{ preventDefault: () => void; }} evt
  */
 async function getCalendar(evt) {
+  console.log('getCalendar function started');
   evt.preventDefault();
   toggleOverlay(true);
 
@@ -305,6 +320,7 @@ async function getCalendar(evt) {
     console.log(`Error: ${JSON.stringify(err)}`);
     showStatus(`Exception getting events from calendar: ${JSON.stringify(err)}`, true);
   }
+  console.log('getCalendar function ended');
 }
 // </GetCalendarSnippet>
 
@@ -313,6 +329,7 @@ async function getCalendar(evt) {
  * @param {{ preventDefault: () => void; }} evt
  */
 async function createEvent(evt) {
+  console.log('createEvent function started');
   evt.preventDefault();
   toggleOverlay(true);
 
@@ -343,11 +360,13 @@ async function createEvent(evt) {
   }
 
   toggleOverlay(false);
+  console.log('createEvent function ended');
 }
 // </CreateEventSnippet>
 
 // <OfficeReadySnippet>
 Office.onReady(info => {
+  console.log('Office.onReady function started');
   // Only run if we're inside Excel
   if (info.host === Office.HostType.Excel) {
     $(async function() {
@@ -383,5 +402,7 @@ Office.onReady(info => {
       }
     });
   }
+  console.log('Office.onReady function ended');
 });
 // </OfficeReadySnippet>
+

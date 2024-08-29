@@ -138,6 +138,46 @@ Update the app registration to support [Office Add-in single sign-on (SSO)](http
 
 1. Select the **Import Calendar** button on the **Home** tab to open the task pane.
 
+## Console Logs
+
+The following console logs have been added to the code to help debug the problem. The logs are added at the start and end of the specified functions to track their execution flow.
+
+### `graph-tutorial/src/addin/consent.js`
+
+- `handleResponse` function
+- `Office.initialize` function
+
+### `graph-tutorial/src/addin/taskpane.js`
+
+- `processConsent` function
+- `showConsentPopup` function
+- `showConsentUi` function
+- `showStatus` function
+- `toggleOverlay` function
+- `showMainUi` function
+- `writeEventsToSheet` function
+- `getCalendar` function
+- `createEvent` function
+- `Office.onReady` function
+
+### `graph-tutorial/src/api/auth.ts`
+
+- `getSigningKey` function
+- `validateJwt` function
+- `getTokenOnBehalfOf` function
+- `authRouter.get('/status', async function(req, res)` function
+
+### `graph-tutorial/src/api/graph.ts`
+
+- `getAuthenticatedClient` function
+- `getTimeZones` function
+- `graphRouter.get('/calendarview', async function(req, res)` function
+- `graphRouter.post('/newevent', async function(req, res)` function
+
+### `graph-tutorial/src/server.ts`
+
+- `https.createServer(serverOptions, app).listen(PORT, () => {` function
+
 ## Code of conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

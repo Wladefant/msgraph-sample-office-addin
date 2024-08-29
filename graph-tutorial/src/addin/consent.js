@@ -30,14 +30,17 @@ const msalRequest = {
  * @param {{ account: { homeId: string; }; accessToken: any; } | null} response
  */
 function handleResponse(response) {
+  console.log('handleResponse function started');
   localStorage.removeItem('msalCallbackExpected');
   if (response !== null) {
     localStorage.setItem('msalAccountId', response.account.homeId);
     Office.context.ui.messageParent(JSON.stringify({ status: 'success', result: response.accessToken }));
   }
+  console.log('handleResponse function ended');
 }
 
 Office.initialize = function () {
+  console.log('Office.initialize function started');
   if (Office.context.ui.messageParent) {
     // Let MSAL process a redirect response if that's what
     // caused this page to load.
@@ -65,5 +68,6 @@ Office.initialize = function () {
       }
     }
   }
+  console.log('Office.initialize function ended');
 };
 // </ConsentJsSnippet>

@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
-
 import Router from 'express-promise-router';
 import { zonedTimeToUtc } from 'date-fns-tz';
 import { findIana } from 'windows-iana';
@@ -11,15 +8,18 @@ import { getTokenOnBehalfOf } from './auth';
 
 // <GetClientSnippet>
 async function getAuthenticatedClient(authHeader: string): Promise<graph.Client> {
+  console.log('getAuthenticatedClient function started');
   const accessToken = await getTokenOnBehalfOf(authHeader);
 
-  return graph.Client.init({
+  const client = graph.Client.init({
     authProvider: (done) => {
       // Call the callback with the
       // access token
       done(null, accessToken || '');
     }
   });
+  console.log('getAuthenticatedClient function ended');
+  return client;
 }
 // </GetClientSnippet>
 
@@ -33,6 +33,7 @@ interface TimeZones {
 }
 
 async function getTimeZones(client: graph.Client): Promise<TimeZones> {
+  console.log('getTimeZones function started');
   // Get mailbox settings to determine user's
   // time zone
   const settings: MailboxSettings = await client
@@ -49,6 +50,7 @@ async function getTimeZones(client: graph.Client): Promise<TimeZones> {
     iana: ianaTz ?? settings.timeZone ?? ''
   };
 
+  console.log('getTimeZones function ended');
   return returnValue;
 }
 // </GetTimeZonesSnippet>
@@ -58,6 +60,7 @@ const graphRouter = Router();
 // <GetCalendarViewSnippet>
 graphRouter.get('/calendarview',
   async function(req, res) {
+    console.log('graphRouter.get("/calendarview") function started');
     const authHeader = req.headers['authorization'];
 
     if (authHeader) {
@@ -120,6 +123,7 @@ graphRouter.get('/calendarview',
       // No auth header
       res.status(401).end();
     }
+    console.log('graphRouter.get("/calendarview") function ended');
   }
 );
 // </GetCalendarViewSnippet>
@@ -127,6 +131,7 @@ graphRouter.get('/calendarview',
 // <CreateEventSnippet>
 graphRouter.post('/newevent',
   async function(req, res) {
+    console.log('graphRouter.post("/newevent") function started');
     const authHeader = req.headers['authorization'];
 
     if (authHeader) {
@@ -162,6 +167,7 @@ graphRouter.post('/newevent',
       // No auth header
       res.status(401).end();
     }
+    console.log('graphRouter.post("/newevent") function ended');
   }
 );
 // </CreateEventSnippet>
