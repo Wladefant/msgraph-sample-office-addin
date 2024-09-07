@@ -6,75 +6,87 @@
 // <ConsentJsSnippet>
 'use strict';
 
+// Ensure MSAL is loaded, or provide a meaningful error message if it's not
 // @ts-ignore
 var msal = msal || {
   PublicClientApplication: () => {
-    throw new Error('MSAL not loaded');
+    throw new Error('MSAL library is not loaded. Make sure MSAL.js is correctly included.');
   },
 };
 
-const msalClient = msal.PublicClientApplication({
-  auth: {
-    // authConfig is defined in config.js
-    // @ts-ignore
-    clientId: authConfig.clientId,
-    navigateToLoginRequestUrl: false,
-  },
-  cache: {
-    cacheLocation: 'localStorage',
-    storeAuthStateInCookie: true,
-  },
-});
+try {
+  // Initialize MSAL client
+  const msalClient = new msal.PublicClientApplication({
+    auth: {
+      // Ensure authConfig is defined and clientId is provided
+      clientId: authConfig?.clientId || (() => { throw new Error('authConfig.clientId is missing or undefined.'); })(),
+      navigateToLoginRequestUrl: false,
+    },
+    cache: {
+      cacheLocation: 'localStorage',
+      storeAuthStateInCookie: true,
+    },
+  });
 
-const msalRequest = {
-  scopes: ['https://graph.microsoft.com/.default'],
-};
+  // Define the MSAL request object
+  const msalRequest = {
+    scopes: ['https://graph.microsoft.com/.default'],
+  };
 
-// Function that handles the redirect back to this page
-// once the user has signed in and granted consent
-/**
- * @param {{ account: { homeId: string; }; accessToken: any; } | null} response
- */
-function handleResponse(response) {
-  localStorage.removeItem('msalCallbackExpected');
-  if (response !== null) {
-    localStorage.setItem('msalAccountId', response.account.homeId);
-    Office.context.ui.messageParent(
-      JSON.stringify({ status: 'success', result: response.accessToken }),
-    );
-  }
-}
-
-Office.onReady(() => {
-  if (Office.context.ui.messageParent) {
-    // Let MSAL process a redirect response if that's what
-    // caused this page to load.
-    msalClient
-      .handleRedirectPromise()
-      .then(handleResponse)
-      .catch((/** @type {any} */ error) => {
-        console.log(error);
-        Office.context.ui.messageParent(
-          JSON.stringify({ status: 'failure', result: error }),
-        );
-      });
-
-    // If we're not expecting a callback (because this is
-    // the first time the page has loaded), then start the
-    // login process
-    if (!localStorage.getItem('msalCallbackExpected')) {
-      // Set the msalCallbackExpected property so we don't
-      // make repeated token requests
-      localStorage.setItem('msalCallbackExpected', 'yes');
-
-      // If the user has signed into this machine before
-      // do a token request, otherwise do a login
-      if (localStorage.getItem('msalAccountId')) {
-        msalClient.acquireTokenRedirect(msalRequest);
-      } else {
-        msalClient.loginRedirect(msalRequest);
-      }
+  // Function that handles the response from MSAL redirect
+  function handleResponse(response) {
+    localStorage.removeItem('msalCallbackExpected');
+    if (response !== null) {
+      // Successful authentication
+      localStorage.setItem('msalAccountId', response.account.homeId);
+      Office.context.ui.messageParent(
+        JSON.stringify({ status: 'success', result: response.accessToken })
+      );
+    } else {
+      // No response, handle as needed
+      console.warn('No response from MSAL handleRedirectPromise.');
     }
   }
-});
+
+  Office.onReady(() => {
+    if (Office.context.ui.messageParent) {
+      // Attempt to handle redirect response
+      msalClient.handleRedirectPromise()
+        .then(handleResponse)
+        .catch((error) => {
+          console.error('Error handling MSAL redirect:', error);
+          Office.context.ui.messageParent(
+            JSON.stringify({ status: 'failure', result: error })
+          );
+        });
+
+      // Check if we are expecting a callback
+      if (!localStorage.getItem('msalCallbackExpected')) {
+        localStorage.setItem('msalCallbackExpected', 'yes');
+
+        // Check if the user has previously signed in
+        if (localStorage.getItem('msalAccountId')) {
+          try {
+            msalClient.acquireTokenRedirect(msalRequest);
+          } catch (error) {
+            console.error('Error acquiring token:', error);
+          }
+        } else {
+          try {
+            msalClient.loginRedirect(msalRequest);
+          } catch (error) {
+            console.error('Error during login redirect:', error);
+          }
+        }
+      }
+    } else {
+      console.error('Office.context.ui.messageParent is not available.');
+    }
+  });
+} catch (error) {
+  console.error('Error initializing MSAL:', error);
+  Office.context.ui.messageParent(
+    JSON.stringify({ status: 'failure', result: error.message })
+  );
+}
 // </ConsentJsSnippet>
