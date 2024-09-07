@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-/* global location, Office, Excel, $ */
+/* global location, Office, $ */
 
 // <AuthUiSnippet>
 // Handle to authentication pop dialog
@@ -271,75 +271,33 @@ function showMainUi() {
 }
 // </MainUiSnippet>
 
-// <WriteToSheetSnippet>
-const DAY_MILLISECONDS = 86400000;
-const DAY_MINUTES = 1440;
-const EXCEL_DATE_OFFSET = 25569;
-
-// Excel date cells require an OLE Automation date format
-// You can use the Moment-MSDate plug-in
-// (https://docs.microsoft.com/office/dev/add-ins/excel/excel-add-ins-ranges-advanced#work-with-dates-using-the-moment-msdate-plug-in)
-// Or you can do the conversion yourself
-/**
- * @param {string | number | Date} dateTime
- */
-function convertDateToOAFormat(dateTime) {
-  const date = new Date(dateTime);
-
-  // Get the time zone offset for the browser's time zone
-  // since all of the dates here are handled in that time zone
-  const tzOffset = date.getTimezoneOffset() / DAY_MINUTES;
-
-  // Calculate the OLE Automation date, which is
-  // the number of days since midnight, December 30, 1899
-  const oaDate =
-    date.getTime() / DAY_MILLISECONDS + EXCEL_DATE_OFFSET - tzOffset;
-  return oaDate;
-}
-
+// <WriteToEmailSnippet>
 /**
  * @param {any[]} events
  */
-async function writeEventsToSheet(events) {
-  await Excel.run(async (context) => {
-    const sheet = context.workbook.worksheets.getActiveWorksheet();
-    const eventsTable = sheet.tables.add('A1:D1', true);
+async function writeEventsToEmail(events) {
+  let emailBody = 'Here are your calendar events:\n\n';
 
-    // Create the header row
-    eventsTable.getHeaderRowRange().values = [
-      ['Subject', 'Organizer', 'Start', 'End'],
-    ];
-
-    // Create the data rows
-    /**
-     * @type {string | number | boolean | any[][] | undefined}
-     */
-    const data = [];
-    events.forEach((event) => {
-      data.push([
-        event.subject,
-        event.organizer.emailAddress.name,
-        convertDateToOAFormat(event.start.dateTime),
-        convertDateToOAFormat(event.end.dateTime),
-      ]);
-    });
-
-    eventsTable.rows.add(undefined, data);
-
-    const tableRange = eventsTable.getRange();
-    tableRange.numberFormat = [['[$-409]m/d/yy h:mm AM/PM;@']];
-    tableRange.format.autofitColumns();
-    tableRange.format.autofitRows();
-
-    try {
-      await context.sync();
-    } catch (err) {
-      console.log(`Error: ${JSON.stringify(err)}`);
-      showStatus(err, true);
-    }
+  events.forEach((event) => {
+    emailBody += `Subject: ${event.subject}\n`;
+    emailBody += `Organizer: ${event.organizer.emailAddress.name}\n`;
+    emailBody += `Start: ${event.start.dateTime}\n`;
+    emailBody += `End: ${event.end.dateTime}\n\n`;
   });
+
+  Office.context.mailbox.item.body.setAsync(
+    emailBody,
+    { coercionType: Office.CoercionType.Text },
+    (asyncResult) => {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        showStatus(`Error writing to email: ${asyncResult.error.message}`, true);
+      } else {
+        showStatus('Events written to email', false);
+      }
+    }
+  );
 }
-// </WriteToSheetSnippet>
+// </WriteToEmailSnippet>
 
 // <GetCalendarSnippet>
 /**
@@ -367,7 +325,7 @@ async function getCalendar(evt) {
 
     if (response.ok) {
       const events = await response.json();
-      if (events.length > 0) writeEventsToSheet(events);
+      if (events.length > 0) writeEventsToEmail(events);
       showStatus(`Imported ${events.length} events`, false);
     } else {
       const error = await response.json();
@@ -430,8 +388,8 @@ async function createEvent(evt) {
 
 // <OfficeReadySnippet>
 Office.onReady((info) => {
-  // Only run if we're inside Excel
-  if (info.host === Office.HostType.Excel) {
+  // Only run if we're inside Outlook
+  if (info.host === Office.HostType.Outlook) {
     $(async function () {
       let apiToken = '';
       try {
