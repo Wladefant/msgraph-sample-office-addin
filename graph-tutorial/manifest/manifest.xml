@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0" xsi:type="MailApp">
-  <Id>dac64749-60d7-4579-9036-cb7308b6d444</Id>
+  <Id>8310f942-69e2-4b24-859d-e8c9bcf05fb3</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
@@ -98,14 +98,13 @@
       <!-- Specifies SSO scopes and resources for the web application that hosts this add-in. -->
       <!-- For more information, see https://learn.microsoft.com/office/dev/add-ins/develop/sso-in-office-add-ins#configure-the-add-in. -->
       <WebApplicationInfo>
-        <Id>8f499c06-901c-4124-a896-b385644a02f7</Id>
-        <Resource>api://localhost:3000/8f499c06-901c-4124-a896-b385644a02f7</Resource>
-        <Scopes>
-          <Scope>openid</Scope>
-          <Scope>user.read</Scope>          
-          <Scope>profile</Scope>
-        </Scopes>
-      </WebApplicationInfo>
-      </VersionOverrides>
+      <Id>2bbb4b95-19f0-4116-925b-199cd1d8413b</Id>
+      <Resource>api://localhost:3000/2bbb4b95-19f0-4116-925b-199cd1d8413b</Resource>
+      <Scopes>
+        <Scope>openid</Scope>
+        <Scope>profile</Scope>
+        <Scope>access_as_user</Scope>
+      </Scopes>
+    </WebApplicationInfo>
   </VersionOverrides>
 </OfficeApp>
