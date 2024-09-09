@@ -110,3 +110,4 @@ config.js
 test.rest
 personal.env
 personal_manifest.xml
+graph-tutorial/src/config/openaiKey.js
