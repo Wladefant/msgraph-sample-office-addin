@@ -5,7 +5,7 @@ import Router from 'express-promise-router';
 import { fromZonedTime } from 'date-fns-tz';
 import { findIana } from 'windows-iana';
 import * as graph from '@microsoft/microsoft-graph-client';
-import { Event, MailboxSettings } from 'microsoft-graph';
+import { Event, MailboxSettings, MailFolder } from 'microsoft-graph';
 import 'isomorphic-fetch';
 import { getTokenOnBehalfOf } from './auth';
 
@@ -162,5 +162,36 @@ graphRouter.post('/newevent', async function (req, res) {
   }
 });
 // </CreateEventSnippet>
+
+// <CreateMailFolderSnippet>
+graphRouter.post('/newmailfolder', async function (req, res) {
+  const authHeader = req.headers['authorization'];
+
+  if (authHeader) {
+    try {
+      const client = await getAuthenticatedClient(authHeader);
+
+      const newMailFolder: MailFolder = {
+        displayName: 'test',
+        isHidden: false,
+      };
+
+      const response = await client.api('/me/mailFolders').post(newMailFolder);
+      console.log('Response:', response);
+
+      console.log(`Incoming request: ${req.method} ${req.path}`);
+      console.log('Headers:', req.headers);
+
+
+      res.status(201).end();
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+    }
+  } else {
+    res.status(401).end();
+  }
+});
+// </CreateMailFolderSnippet>
 
 export default graphRouter;

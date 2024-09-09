@@ -268,7 +268,18 @@ function showMainUi() {
       }),
     )
     .appendTo('.container');
-}
+  
+
+    // Add a new button labeled 'Create Mail Folder'
+    $('<button/>', {
+      class: 'primary-button',
+      text: 'Create Mail Folder',
+      id: 'createMailFolderButton',
+    }).appendTo('.container');
+  
+    // Add event listener to the new button
+    $('#createMailFolderButton').on('click', createMailFolder);
+  }
 // </MainUiSnippet>
 
 // <WriteToEmailSnippet>
@@ -308,9 +319,7 @@ async function getCalendar(evt) {
   toggleOverlay(true);
 
   try {
-    const apiToken = await OfficeRuntime.auth.getAccessToken({
-      allowSignInPrompt: true,
-    });
+    const apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikg5bmo1QU9Tc3dNcGhnMVNGeDdqYVYtbEI5dyJ9.eyJhdWQiOiIyYmJiNGI5NS0xOWYwLTQxMTYtOTI1Yi0xOTljZDFkODQxM2IiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vYTMxOTdmZGYtNWRlMi00MzhiLTk4YTMtN2E2Mjg3MTYxYzMwL3YyLjAiLCJpYXQiOjE3MjU4NjQxODYsIm5iZiI6MTcyNTg2NDE4NiwiZXhwIjoxNzI1ODY5Mzc1LCJhaW8iOiJBWFFBaS84WEFBQUFPSjdEUVNOZmNGUDk2aVRQdkpyMjhtRkdYcE82aWZzSjBtc1RSVWRtd25BdnBkVm9KZENoV1lzcjZFQUJ3NlVMbWQ3RXJ0WjR1OWo2cDlweW9XYUNOU25pVWdmUlRWZmU3ZTdFVTVySVF2K3V4L1EzSVNjNVVQNEJhSGYzY3NwZkN6NWVjelRXR0xYTndLdDMxZ2hVK1E9PSIsImF6cCI6IjkzZDUzNjc4LTYxM2QtNDAxMy1hZmMxLTYyZTllNDQ0YTBhNSIsImF6cGFjciI6IjAiLCJuYW1lIjoiV2xhZGltaXIgS2lyamFub3ZzIiwib2lkIjoiMWY5NTAzZDctYTY5NS00ZWM4LWE0MDUtNzIyZDhiNjQzNDgyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidy5raXJqYW5vdnNAcmVhbGVzdC1haS5jb20iLCJyaCI6IjAuQWIwQTMzOFpvLUpkaTBPWW8zcGloeFljTUpWTHV5dndHUlpCa2xzWm5OSFlRVHNEQVZZLiIsInNjcCI6ImFjY2Vzc19hc191c2VyIiwic3ViIjoiZ0l5Q3FVOVdiQkY0YW5KcXFac05PSjJxX2lkSGxzNmZVWlM1V3hWVDYzZyIsInRpZCI6ImEzMTk3ZmRmLTVkZTItNDM4Yi05OGEzLTdhNjI4NzE2MWMzMCIsInV0aSI6IjFhSllmOHI4OUV5b3JHQmtxMHAtQUEiLCJ2ZXIiOiIyLjAifQ.P8OC_43f33wB0ADQhgYc8SyB8M2NmHtBWjrQU_jdTWv4lL7i6SKSaMtfjNVEJbCP7qykgTOGNfB7-AfYohj9dAchQYppjfXrFWulzVxois5CJA7k-wvBW9uNBv1WOi2FZtlohdYCU-92YJk6_ouZVcWd3vV4aA0zxrFPEoMId8pZz-v32gz1l9LiQGlfZSF5Bm80GuoOeDv5ExMI9ZmEGTZYNkDnoKbmopTQKiHZn-C6gRir-6IIDurfsqdZXIr-5KQgPMUWysMpYI_i5w9J-CN7WbUaezYi1s3fUTySYWwsFc2JoM49yNjqEVe2FIdh8O6xcrH0o20_vvd1DlFu6Q"
 
     const viewStart = $('#viewStart').val();
     const viewEnd = $('#viewEnd').val();
@@ -354,9 +363,7 @@ async function createEvent(evt) {
   evt.preventDefault();
   toggleOverlay(true);
 
-  const apiToken = await OfficeRuntime.auth.getAccessToken({
-    allowSignInPrompt: true,
-  });
+  const apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikg5bmo1QU9Tc3dNcGhnMVNGeDdqYVYtbEI5dyJ9.eyJhdWQiOiIyYmJiNGI5NS0xOWYwLTQxMTYtOTI1Yi0xOTljZDFkODQxM2IiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vYTMxOTdmZGYtNWRlMi00MzhiLTk4YTMtN2E2Mjg3MTYxYzMwL3YyLjAiLCJpYXQiOjE3MjU4NjQxODYsIm5iZiI6MTcyNTg2NDE4NiwiZXhwIjoxNzI1ODY5Mzc1LCJhaW8iOiJBWFFBaS84WEFBQUFPSjdEUVNOZmNGUDk2aVRQdkpyMjhtRkdYcE82aWZzSjBtc1RSVWRtd25BdnBkVm9KZENoV1lzcjZFQUJ3NlVMbWQ3RXJ0WjR1OWo2cDlweW9XYUNOU25pVWdmUlRWZmU3ZTdFVTVySVF2K3V4L1EzSVNjNVVQNEJhSGYzY3NwZkN6NWVjelRXR0xYTndLdDMxZ2hVK1E9PSIsImF6cCI6IjkzZDUzNjc4LTYxM2QtNDAxMy1hZmMxLTYyZTllNDQ0YTBhNSIsImF6cGFjciI6IjAiLCJuYW1lIjoiV2xhZGltaXIgS2lyamFub3ZzIiwib2lkIjoiMWY5NTAzZDctYTY5NS00ZWM4LWE0MDUtNzIyZDhiNjQzNDgyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidy5raXJqYW5vdnNAcmVhbGVzdC1haS5jb20iLCJyaCI6IjAuQWIwQTMzOFpvLUpkaTBPWW8zcGloeFljTUpWTHV5dndHUlpCa2xzWm5OSFlRVHNEQVZZLiIsInNjcCI6ImFjY2Vzc19hc191c2VyIiwic3ViIjoiZ0l5Q3FVOVdiQkY0YW5KcXFac05PSjJxX2lkSGxzNmZVWlM1V3hWVDYzZyIsInRpZCI6ImEzMTk3ZmRmLTVkZTItNDM4Yi05OGEzLTdhNjI4NzE2MWMzMCIsInV0aSI6IjFhSllmOHI4OUV5b3JHQmtxMHAtQUEiLCJ2ZXIiOiIyLjAifQ.P8OC_43f33wB0ADQhgYc8SyB8M2NmHtBWjrQU_jdTWv4lL7i6SKSaMtfjNVEJbCP7qykgTOGNfB7-AfYohj9dAchQYppjfXrFWulzVxois5CJA7k-wvBW9uNBv1WOi2FZtlohdYCU-92YJk6_ouZVcWd3vV4aA0zxrFPEoMId8pZz-v32gz1l9LiQGlfZSF5Bm80GuoOeDv5ExMI9ZmEGTZYNkDnoKbmopTQKiHZn-C6gRir-6IIDurfsqdZXIr-5KQgPMUWysMpYI_i5w9J-CN7WbUaezYi1s3fUTySYWwsFc2JoM49yNjqEVe2FIdh8O6xcrH0o20_vvd1DlFu6Q"
 
   const payload = {
     eventSubject: $('#eventSubject').val(),
@@ -386,23 +393,44 @@ async function createEvent(evt) {
 }
 // </CreateEventSnippet>
 
+// Implement a new function `createMailFolder`
+async function createMailFolder() {
+  toggleOverlay(true);
+
+  const apiToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikg5bmo1QU9Tc3dNcGhnMVNGeDdqYVYtbEI5dyJ9.eyJhdWQiOiIyYmJiNGI5NS0xOWYwLTQxMTYtOTI1Yi0xOTljZDFkODQxM2IiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vYTMxOTdmZGYtNWRlMi00MzhiLTk4YTMtN2E2Mjg3MTYxYzMwL3YyLjAiLCJpYXQiOjE3MjU4NjQxODYsIm5iZiI6MTcyNTg2NDE4NiwiZXhwIjoxNzI1ODY5Mzc1LCJhaW8iOiJBWFFBaS84WEFBQUFPSjdEUVNOZmNGUDk2aVRQdkpyMjhtRkdYcE82aWZzSjBtc1RSVWRtd25BdnBkVm9KZENoV1lzcjZFQUJ3NlVMbWQ3RXJ0WjR1OWo2cDlweW9XYUNOU25pVWdmUlRWZmU3ZTdFVTVySVF2K3V4L1EzSVNjNVVQNEJhSGYzY3NwZkN6NWVjelRXR0xYTndLdDMxZ2hVK1E9PSIsImF6cCI6IjkzZDUzNjc4LTYxM2QtNDAxMy1hZmMxLTYyZTllNDQ0YTBhNSIsImF6cGFjciI6IjAiLCJuYW1lIjoiV2xhZGltaXIgS2lyamFub3ZzIiwib2lkIjoiMWY5NTAzZDctYTY5NS00ZWM4LWE0MDUtNzIyZDhiNjQzNDgyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidy5raXJqYW5vdnNAcmVhbGVzdC1haS5jb20iLCJyaCI6IjAuQWIwQTMzOFpvLUpkaTBPWW8zcGloeFljTUpWTHV5dndHUlpCa2xzWm5OSFlRVHNEQVZZLiIsInNjcCI6ImFjY2Vzc19hc191c2VyIiwic3ViIjoiZ0l5Q3FVOVdiQkY0YW5KcXFac05PSjJxX2lkSGxzNmZVWlM1V3hWVDYzZyIsInRpZCI6ImEzMTk3ZmRmLTVkZTItNDM4Yi05OGEzLTdhNjI4NzE2MWMzMCIsInV0aSI6IjFhSllmOHI4OUV5b3JHQmtxMHAtQUEiLCJ2ZXIiOiIyLjAifQ.P8OC_43f33wB0ADQhgYc8SyB8M2NmHtBWjrQU_jdTWv4lL7i6SKSaMtfjNVEJbCP7qykgTOGNfB7-AfYohj9dAchQYppjfXrFWulzVxois5CJA7k-wvBW9uNBv1WOi2FZtlohdYCU-92YJk6_ouZVcWd3vV4aA0zxrFPEoMId8pZz-v32gz1l9LiQGlfZSF5Bm80GuoOeDv5ExMI9ZmEGTZYNkDnoKbmopTQKiHZn-C6gRir-6IIDurfsqdZXIr-5KQgPMUWysMpYI_i5w9J-CN7WbUaezYi1s3fUTySYWwsFc2JoM49yNjqEVe2FIdh8O6xcrH0o20_vvd1DlFu6Q"
+
+
+  const payload = {
+    displayName: 'test',
+    isHidden: false,
+  };
+
+  const requestUrl = `${getBaseUrl()}/graph/newmailfolder`;
+
+  const response = await fetch(requestUrl, {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${apiToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (response.ok) {
+    showStatus('Mail folder created', false);
+  } else {
+    const error = await response.json();
+    showStatus(`Error creating mail folder: ${JSON.stringify(error)}`, true);
+  }
+
+  toggleOverlay(false);
+}
 // <OfficeReadySnippet>
 Office.onReady((info) => {
   // Only run if we're inside Outlook
   if (info.host === Office.HostType.Outlook) {
     $(async function () {
-      let apiToken = '';
-      try {
-        apiToken = await OfficeRuntime.auth.getAccessToken({
-          allowSignInPrompt: true,
-        });
-        console.log(`API Token: ${apiToken}`);
-      } catch (error) {
-        console.log(`getAccessToken error: ${JSON.stringify(error)}`);
-        // Fall back to interactive login
-        showConsentUi();
-      }
-
+      let apiToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikg5bmo1QU9Tc3dNcGhnMVNGeDdqYVYtbEI5dyJ9.eyJhdWQiOiIyYmJiNGI5NS0xOWYwLTQxMTYtOTI1Yi0xOTljZDFkODQxM2IiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vYTMxOTdmZGYtNWRlMi00MzhiLTk4YTMtN2E2Mjg3MTYxYzMwL3YyLjAiLCJpYXQiOjE3MjU4NjQxODYsIm5iZiI6MTcyNTg2NDE4NiwiZXhwIjoxNzI1ODY5Mzc1LCJhaW8iOiJBWFFBaS84WEFBQUFPSjdEUVNOZmNGUDk2aVRQdkpyMjhtRkdYcE82aWZzSjBtc1RSVWRtd25BdnBkVm9KZENoV1lzcjZFQUJ3NlVMbWQ3RXJ0WjR1OWo2cDlweW9XYUNOU25pVWdmUlRWZmU3ZTdFVTVySVF2K3V4L1EzSVNjNVVQNEJhSGYzY3NwZkN6NWVjelRXR0xYTndLdDMxZ2hVK1E9PSIsImF6cCI6IjkzZDUzNjc4LTYxM2QtNDAxMy1hZmMxLTYyZTllNDQ0YTBhNSIsImF6cGFjciI6IjAiLCJuYW1lIjoiV2xhZGltaXIgS2lyamFub3ZzIiwib2lkIjoiMWY5NTAzZDctYTY5NS00ZWM4LWE0MDUtNzIyZDhiNjQzNDgyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidy5raXJqYW5vdnNAcmVhbGVzdC1haS5jb20iLCJyaCI6IjAuQWIwQTMzOFpvLUpkaTBPWW8zcGloeFljTUpWTHV5dndHUlpCa2xzWm5OSFlRVHNEQVZZLiIsInNjcCI6ImFjY2Vzc19hc191c2VyIiwic3ViIjoiZ0l5Q3FVOVdiQkY0YW5KcXFac05PSjJxX2lkSGxzNmZVWlM1V3hWVDYzZyIsInRpZCI6ImEzMTk3ZmRmLTVkZTItNDM4Yi05OGEzLTdhNjI4NzE2MWMzMCIsInV0aSI6IjFhSllmOHI4OUV5b3JHQmtxMHAtQUEiLCJ2ZXIiOiIyLjAifQ.P8OC_43f33wB0ADQhgYc8SyB8M2NmHtBWjrQU_jdTWv4lL7i6SKSaMtfjNVEJbCP7qykgTOGNfB7-AfYohj9dAchQYppjfXrFWulzVxois5CJA7k-wvBW9uNBv1WOi2FZtlohdYCU-92YJk6_ouZVcWd3vV4aA0zxrFPEoMId8pZz-v32gz1l9LiQGlfZSF5Bm80GuoOeDv5ExMI9ZmEGTZYNkDnoKbmopTQKiHZn-C6gRir-6IIDurfsqdZXIr-5KQgPMUWysMpYI_i5w9J-CN7WbUaezYi1s3fUTySYWwsFc2JoM49yNjqEVe2FIdh8O6xcrH0o20_vvd1DlFu6Q';
       // Call auth status API to see if we need to get consent
       const authStatusResponse = await fetch(`${getBaseUrl()}/auth/status`, {
         headers: {
