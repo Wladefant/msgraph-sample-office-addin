@@ -1,3 +1,7 @@
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import Frame3 from "../taskpane/components/Frame3";
+
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
@@ -279,7 +283,19 @@ function showMainUi() {
   
     // Add event listener to the new button
     $('#createMailFolderButton').on('click', createMailFolder);
-  }
+
+    // Add a new button labeled 'Go to Frame3'
+    $('<button/>', {
+      class: 'primary-button',
+      text: 'Go to Frame3',
+      id: 'goToFrame3Button',
+    }).appendTo('.container');
+
+    // Add event listener to the 'Go to Frame3' button
+    $('#goToFrame3Button').on('click', () => {
+      ReactDOM.render(<Frame3 />, document.getElementById('frame3-container'));
+    });
+}
 // </MainUiSnippet>
 
 // <WriteToEmailSnippet>
